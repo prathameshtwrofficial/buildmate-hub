@@ -504,30 +504,35 @@ const Dashboard = () => {
           </motion.aside>
         )}
 
-      {/* Mobile Bottom Navigation - Always Visible */}
-      {isMobile && console.log('Rendering mobile navigation') && (
-        <motion.nav
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 400, damping: 30, duration: 0.5 }}
-          className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-black/98 backdrop-blur-3xl border-t-2 border-yellow-400/60 px-2 py-3 safe-area-inset-bottom shadow-2xl shadow-yellow-400/30 ${mobileMenuOpen ? 'hidden' : ''}`}
-          style={{
-            paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
-            height: 'auto',
-            minHeight: '88px',
-            backdropFilter: 'blur(24px)',
-            WebkitBackdropFilter: 'blur(24px)',
-            position: 'fixed',
-            bottom: '0px',
-            left: '0px',
-            right: '0px',
-            zIndex: 2147483647, // Maximum possible z-index
-            pointerEvents: 'auto',
-            transform: 'translateZ(0)', // Force GPU acceleration
-            willChange: 'transform',
-            contain: 'layout style paint'
-          }}
-        >
+      {/* Mobile Bottom Navigation - OVERLAY STYLE */}
+      {typeof window !== 'undefined' && window.innerWidth < 768 && (
+        <>
+          {console.log('📱 OVERLAY MOBILE NAV RENDERING - Width:', window.innerWidth)}
+        </>
+      )}
+
+      {/* FORCE OVERLAY NAVIGATION - Always visible on mobile screens */}
+      <motion.nav
+        initial={{ y: 120, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 500, damping: 35, duration: 0.6, delay: 0.2 }}
+        className="mobile-overlay-nav fixed bottom-0 left-0 right-0 z-[9999] bg-black/95 backdrop-blur-3xl border-t-2 border-yellow-400/70 px-3 py-4 shadow-2xl shadow-yellow-400/40"
+        style={{
+          display: typeof window !== 'undefined' && window.innerWidth < 768 ? 'block' : 'none',
+          position: 'fixed',
+          bottom: '0px',
+          left: '0px',
+          right: '0px',
+          zIndex: 9999,
+          height: '92px',
+          minHeight: '92px',
+          paddingBottom: 'max(20px, env(safe-area-inset-bottom))',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          transform: 'translateZ(0)',
+          willChange: 'transform'
+        }}
+      >
           <div className="flex items-center justify-around max-w-md mx-auto gap-1">
             {navigationItems.slice(0, 4).map((item) => (
               <motion.button
@@ -571,8 +576,7 @@ const Dashboard = () => {
               <span className="text-xs font-semibold leading-tight">More</span>
             </motion.button>
           </div>
-        </motion.nav>
-      )}
+      </motion.nav>
 
       {/* Mobile Bottom Sheet Menu */}
       <AnimatePresence>
