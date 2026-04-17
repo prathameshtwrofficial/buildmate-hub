@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer";
 import { Search, CalendarCheck, Truck, ThumbsUp } from "lucide-react";
 
 const steps = [
-  { icon: Search, title: "Browse", desc: "Explore our fleet of 500+ machines and equipment" },
+  { icon: Search, title: "Browse", desc: "Explore our fleet of machines and equipment" },
   { icon: CalendarCheck, title: "Book", desc: "Select dates and get instant pricing & availability" },
   { icon: Truck, title: "Deliver", desc: "We deliver the machine right to your construction site" },
   { icon: ThumbsUp, title: "Build", desc: "Start your project with top-quality equipment" },

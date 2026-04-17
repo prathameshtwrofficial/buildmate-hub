@@ -279,7 +279,7 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     sessionStorage.removeItem('adminAuth');
-    navigate('/admin');
+    navigate('/');
   };
 
   return (
