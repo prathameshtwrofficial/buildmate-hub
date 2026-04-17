@@ -506,15 +506,20 @@ const Dashboard = () => {
 
       {/* Mobile Bottom Navigation */}
       {isMobile && (
+        <>
+          {console.log('Mobile navigation rendering:', { isMobile, navigationItems: navigationItems.length })}
+        </>
         <motion.nav
-          initial={{ y: 100 }}
-          animate={{ y: 0 }}
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 400, damping: 30, duration: 0.5 }}
-          className={`fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-2xl border-t border-slate-800 px-2 py-3 safe-area-inset-bottom shadow-2xl ${mobileMenuOpen ? 'hidden' : ''}`}
+          className={`fixed bottom-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-2xl border-t-2 border-yellow-400/50 px-2 py-3 safe-area-inset-bottom shadow-2xl shadow-yellow-400/20 ${mobileMenuOpen ? 'hidden' : ''}`}
           style={{
-            paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
+            paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
             height: 'auto',
-            minHeight: '80px'
+            minHeight: '84px',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)'
           }}
         >
           <div className="flex items-center justify-around max-w-md mx-auto gap-1">
@@ -522,34 +527,42 @@ const Dashboard = () => {
               <motion.button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`flex flex-col items-center justify-center px-3 py-3 rounded-xl transition-all duration-300 min-w-0 flex-1 min-h-[64px] active:scale-95 ${
+                className={`flex flex-col items-center justify-center px-3 py-3 rounded-xl transition-all duration-300 min-w-0 flex-1 min-h-[68px] active:scale-95 touch-manipulation ${
                   activeTab === item.id
-                    ? 'text-yellow-400 bg-yellow-400/15 shadow-lg shadow-yellow-400/20'
-                    : 'text-slate-400 hover:text-yellow-400 hover:bg-slate-800/60'
+                    ? 'text-yellow-400 bg-yellow-400/20 shadow-lg shadow-yellow-400/30 border border-yellow-400/30'
+                    : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-800/70'
                 }`}
-                whileTap={{ scale: 0.92 }}
-                style={{ WebkitTapHighlightColor: 'transparent' }}
+                whileTap={{ scale: 0.88 }}
+                style={{
+                  WebkitTapHighlightColor: 'transparent',
+                  WebkitTouchCallout: 'none',
+                  WebkitUserSelect: 'none'
+                }}
               >
-                <item.icon className={`w-6 h-6 mb-1 transition-transform duration-200 ${
-                  activeTab === item.id ? 'scale-110' : ''
+                <item.icon className={`w-7 h-7 mb-1 transition-transform duration-200 ${
+                  activeTab === item.id ? 'scale-110 drop-shadow-lg' : ''
                 }`} />
-                <span className="text-xs font-medium truncate leading-tight">{item.label}</span>
+                <span className="text-xs font-semibold truncate leading-tight">{item.label}</span>
               </motion.button>
             ))}
             <motion.button
               onClick={() => setMobileMenuOpen(true)}
-              className={`flex flex-col items-center justify-center px-3 py-3 rounded-xl transition-all duration-300 min-w-0 flex-1 min-h-[64px] active:scale-95 ${
+              className={`flex flex-col items-center justify-center px-3 py-3 rounded-xl transition-all duration-300 min-w-0 flex-1 min-h-[68px] active:scale-95 touch-manipulation ${
                 mobileMenuOpen
-                  ? 'text-yellow-400 bg-yellow-400/15 shadow-lg shadow-yellow-400/20'
-                  : 'text-slate-400 hover:text-yellow-400 hover:bg-slate-800/60'
+                  ? 'text-yellow-400 bg-yellow-400/20 shadow-lg shadow-yellow-400/30 border border-yellow-400/30'
+                  : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-800/70'
               }`}
-              whileTap={{ scale: 0.92 }}
-              style={{ WebkitTapHighlightColor: 'transparent' }}
+              whileTap={{ scale: 0.88 }}
+              style={{
+                WebkitTapHighlightColor: 'transparent',
+                WebkitTouchCallout: 'none',
+                WebkitUserSelect: 'none'
+              }}
             >
-              <Menu className={`w-6 h-6 mb-1 transition-transform duration-200 ${
-                mobileMenuOpen ? 'scale-110' : ''
+              <Menu className={`w-7 h-7 mb-1 transition-transform duration-200 ${
+                mobileMenuOpen ? 'scale-110 drop-shadow-lg' : ''
               }`} />
-              <span className="text-xs font-medium leading-tight">More</span>
+              <span className="text-xs font-semibold leading-tight">More</span>
             </motion.button>
           </div>
         </motion.nav>
@@ -625,7 +638,7 @@ const Dashboard = () => {
       </AnimatePresence>
 
         {/* Main Content */}
-        <main className={`flex-1 transition-all duration-500 ${!isMobile ? (sidebarCollapsed ? 'ml-24' : 'ml-80') : 'pb-28 overflow-x-hidden'}`}>
+        <main className={`flex-1 transition-all duration-500 ${!isMobile ? (sidebarCollapsed ? 'ml-24' : 'ml-80') : 'pb-32 overflow-x-hidden'}`}>
               <div className={`${isMobile ? 'p-4 pb-28' : 'p-6'} relative z-10 max-w-full overflow-x-hidden`}>
             {/* Home/Dashboard Tab */}
             {activeTab === 'home' && (
