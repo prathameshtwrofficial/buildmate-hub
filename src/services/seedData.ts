@@ -1,4 +1,7 @@
 // Complete AJAX machine data for seeding Firestore with official AJAX images
+import { collection, doc, setDoc, updateDoc, getDocs } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { getMachines } from './machineService';
 const sampleMachines = [
   // SLCM - ARGO Series (with official AJAX image URLs)
   {
@@ -691,7 +694,7 @@ export const seedFirestore = async (addRemaining = false) => {
     console.log('Checking existing data in Firestore...');
 
     // First check what data already exists
-    const { getMachines } = await import('./machineService');
+
     const existingMachines = await getMachines();
     const existingNames = new Set(existingMachines.map(m => m.name));
 
@@ -825,7 +828,7 @@ export const updateMachineImages = async () => {
   try {
     console.log('Updating machine images with official AJAX images...');
 
-    const { getMachines } = await import('./machineService');
+
     const existingMachines = await getMachines();
 
     if (existingMachines.length === 0) {
@@ -853,8 +856,6 @@ export const updateMachineImages = async () => {
         if (officialImage && machine.image !== officialImage) {
           try {
             // Update the machine document with the new image
-            const { db } = await import('./firebase');
-            const { doc, updateDoc } = await import('firebase/firestore');
 
             const machineRef = doc(db, 'machines', machine.id);
             await updateDoc(machineRef, {
