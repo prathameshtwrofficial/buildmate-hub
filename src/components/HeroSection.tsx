@@ -94,7 +94,7 @@ const HeroSection = () => {
                 <Button
                   size="lg"
                   onClick={handleStartClick}
-                  className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold text-xl px-12 h-16 rounded-2xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 group backdrop-blur-sm border border-white/20"
+                  className="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 hover:from-yellow-600 hover:via-orange-600 hover:to-red-600 text-white font-bold text-xl px-12 h-16 rounded-2xl shadow-2xl hover:shadow-orange-500/25 transition-all duration-300 group backdrop-blur-sm border border-white/20"
                 >
                   <Zap className="mr-3 h-7 w-7 group-hover:animate-pulse" />
                   <span className="relative z-10">Start</span>

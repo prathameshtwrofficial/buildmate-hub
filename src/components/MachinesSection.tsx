@@ -192,8 +192,8 @@ const MachinesSection = () => {
             </div>
 
             {/* Desktop Grid */}
-            <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 xl:gap-10">
-              {filtered.slice(0, 10).map((machine, i) => (
+            <div className="hidden md:grid grid-cols-3 gap-6 lg:gap-8 xl:gap-10">
+              {filtered.slice(0, 9).map((machine, i) => (
                 <MachineCard key={machine.id} machine={machine} index={i} onBook={setSelectedMachine} />
               ))}
             </div>

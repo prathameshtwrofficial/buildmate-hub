@@ -34,7 +34,7 @@ export const getMachines = (): Machine[] => {
 };
 
 export const categories = [
-  { id: "slcm", name: "Self-Loading Concrete Mixers", icon: "🏗️", count: 18, description: "ARGO series with capacities from 1-4.8 cu.m" },
+   { id: "slcm", name: "Self-Loading Concrete Mixers", icon: "🏗️", count: 22, description: "ARGO series with capacities from 1-5.0 cu.m" },
   { id: "crb", name: "CRB Batching Plants", icon: "🏭", count: 7, description: "Modular batching plants 20-120 cu.m/hr" },
   { id: "irb", name: "IRB Batching Plants", icon: "🏭", count: 6, description: "Inline bin batching plants 30-120 cu.m/hr" },
   { id: "ibp", name: "IBP Batching Plants", icon: "🏭", count: 9, description: "Belt conveyor batching plants 30-240 cu.m/hr" },
@@ -43,7 +43,7 @@ export const categories = [
 ];
 
 export const stats = [
-  { label: "AJAX Machines Available", value: "54" },
+   { label: "AJAX Machines Available", value: "58" },
   { label: "Global Projects Completed", value: "20,000+" },
   { label: "Countries Exported To", value: "50+" },
   { label: "Years of Excellence", value: "35+" },

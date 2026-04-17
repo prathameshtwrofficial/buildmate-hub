@@ -224,7 +224,7 @@ export class MachineDataService {
       if (!slNoMatch) return null;
 
       const slNo = slNoMatch[1];
-      let modelDesc = descriptionPart.replace(/^\d+\s*/, '');
+      const modelDesc = descriptionPart.replace(/^\d+\s*/, '');
 
       // Parse prices
       const listPrice = parseInt(listPriceStr.replace(/,/g, ''), 10);
@@ -292,36 +292,47 @@ export class MachineDataService {
 
   private parseOtherMachineLine(line: string, category: string): ParsedMachine | null {
     try {
-      // Parse lines like "CRB 20 - 20 cu.m/hr" or "AF 6XE - 6 cu.m"
+      // Parse lines like "CRB 20 - 20 cu.m/hr" or "CRB 20 - 20 cu.m/hr - 20,00,000 24,00,000"
       const parts = line.split(' - ');
-      if (parts.length !== 2) return null;
+      if (parts.length < 2) return null;
 
       const model = parts[0].trim();
       const capacity = parts[1].trim();
+      let listPrice = 0;
+      let aspPrice = 0;
+
+      // Check if there are prices after another -
+      if (parts.length >= 3) {
+        const pricePart = parts[2].trim();
+        const priceMatch = pricePart.match(/(\d+(?:,\d{3})*)\s+(\d+(?:,\d{3})*)$/);
+        if (priceMatch) {
+          listPrice = parseInt(priceMatch[1].replace(/,/g, ''));
+          aspPrice = parseInt(priceMatch[2].replace(/,/g, ''));
+        }
+      }
 
       // Generate ID
       const id = model.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 
-      // Set default prices based on category (these can be updated with real pricing)
-      let listPrice = 0;
-      let aspPrice = 0;
-
-      // Default pricing based on category and capacity
-      if (category.startsWith('CRB') || category.startsWith('IRB') || category.startsWith('IBP')) {
-        // Batching plants - price per capacity
-        const capNum = parseInt(capacity);
-        listPrice = capNum * 50000; // Rough estimate
-        aspPrice = capNum * 60000;
-      } else if (category === 'AF') {
-        // Transit mixers
-        const capNum = parseInt(capacity);
-        listPrice = capNum * 800000; // Rough estimate
-        aspPrice = capNum * 950000;
-      } else if (category === 'ASP') {
-        // Concrete pumps
-        const capNum = parseInt(capacity);
-        listPrice = capNum * 120000; // Rough estimate
-        aspPrice = capNum * 140000;
+      // If prices not parsed, set default prices based on category
+      if (listPrice === 0 || aspPrice === 0) {
+        // Default pricing based on category and capacity
+        if (category.startsWith('CRB') || category.startsWith('IRB') || category.startsWith('IBP')) {
+          // Batching plants - price per capacity
+          const capNum = parseInt(capacity);
+          listPrice = capNum * 50000; // Rough estimate
+          aspPrice = capNum * 60000;
+        } else if (category === 'AF') {
+          // Transit mixers
+          const capNum = parseInt(capacity);
+          listPrice = capNum * 800000; // Rough estimate
+          aspPrice = capNum * 950000;
+        } else if (category === 'ASP') {
+          // Concrete pumps
+          const capNum = parseInt(capacity);
+          listPrice = capNum * 120000; // Rough estimate
+          aspPrice = capNum * 140000;
+        }
       }
 
       return {
@@ -379,6 +390,8 @@ export class MachineDataService {
         'argo-4300-acura': '/assets/argo-4500.avif',
         'argo-4800': '/assets/argo-4800.webp',
         'argo-4800-acura': '/assets/argo-4800.webp',
+        'argo-5000': '/assets/argo-4800.webp',
+        'argo-5000-acura': '/assets/argo-4800.webp',
 
         // Default images for other categories
         'crb': '/src/assets/machine-crane.jpg',
@@ -411,7 +424,7 @@ export class MachineDataService {
         imageKey += '-acura';
       }
 
-      let image = availableImages[imageKey] || availableImages[imageKey.replace('-acura', '')] || '/src/assets/machine-mixer.jpg';
+      const image = availableImages[imageKey] || availableImages[imageKey.replace('-acura', '')] || '/src/assets/machine-mixer.jpg';
 
       // Calculate daily rates based on category with error handling
       let dailyRate = 0;
