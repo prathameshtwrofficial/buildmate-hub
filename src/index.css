@@ -488,4 +488,22 @@
     transform: none;
     box-shadow: none;
   }
+
+  /* Force mobile bottom navigation visibility */
+  .mobile-bottom-nav {
+    position: fixed !important;
+    bottom: 0px !important;
+    left: 0px !important;
+    right: 0px !important;
+    z-index: 2147483647 !important; /* Maximum z-index */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateZ(0) !important;
+    backface-visibility: hidden !important;
+    -webkit-transform: translateZ(0) !important;
+    -webkit-backface-visibility: hidden !important;
+    contain: layout style paint !important;
+  }
 }

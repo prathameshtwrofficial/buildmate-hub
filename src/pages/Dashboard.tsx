@@ -349,7 +349,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-black via-slate-900 to-slate-800 relative ${isMobile ? 'overflow-x-hidden' : 'overflow-hidden'}`}>
+    <div className={`min-h-screen bg-gradient-to-br from-black via-slate-900 to-slate-800 relative ${isMobile ? 'overflow-x-hidden' : 'overflow-hidden'}`} style={isMobile ? { paddingBottom: '100px' } : {}}>
       {/* Premium Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-yellow-500/3 via-yellow-400/2 to-yellow-600/3"></div>
@@ -504,13 +504,13 @@ const Dashboard = () => {
           </motion.aside>
         )}
 
-      {/* Mobile Bottom Navigation */}
-      {isMobile && (
+      {/* Mobile Bottom Navigation - Always Visible */}
+      {isMobile && console.log('Rendering mobile navigation') && (
         <motion.nav
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 400, damping: 30, duration: 0.5 }}
-          className={`fixed bottom-0 left-0 right-0 z-50 bg-black/98 backdrop-blur-3xl border-t-2 border-yellow-400/60 px-2 py-3 safe-area-inset-bottom shadow-2xl shadow-yellow-400/30 ${mobileMenuOpen ? 'hidden' : ''}`}
+          className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-black/98 backdrop-blur-3xl border-t-2 border-yellow-400/60 px-2 py-3 safe-area-inset-bottom shadow-2xl shadow-yellow-400/30 ${mobileMenuOpen ? 'hidden' : ''}`}
           style={{
             paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
             height: 'auto',
@@ -518,11 +518,14 @@ const Dashboard = () => {
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
             position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            zIndex: 9999,
-            pointerEvents: 'auto'
+            bottom: '0px',
+            left: '0px',
+            right: '0px',
+            zIndex: 2147483647, // Maximum possible z-index
+            pointerEvents: 'auto',
+            transform: 'translateZ(0)', // Force GPU acceleration
+            willChange: 'transform',
+            contain: 'layout style paint'
           }}
         >
           <div className="flex items-center justify-around max-w-md mx-auto gap-1">
@@ -641,7 +644,7 @@ const Dashboard = () => {
       </AnimatePresence>
 
         {/* Main Content */}
-        <main className={`flex-1 transition-all duration-500 ${!isMobile ? (sidebarCollapsed ? 'ml-24' : 'ml-80') : 'pb-40 overflow-x-hidden'}`}>
+        <main className={`flex-1 transition-all duration-500 ${!isMobile ? (sidebarCollapsed ? 'ml-24' : 'ml-80') : 'pb-40 overflow-x-hidden'}`} style={isMobile ? { marginBottom: '0px', paddingBottom: '120px' } : {}}>
               <div className={`${isMobile ? 'p-4 pb-28' : 'p-6'} relative z-10 max-w-full overflow-x-hidden`}>
             {/* Home/Dashboard Tab */}
             {activeTab === 'home' && (
