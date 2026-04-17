@@ -504,72 +504,81 @@ const Dashboard = () => {
           </motion.aside>
         )}
 
-      {/* Mobile Bottom Navigation - Always Visible */}
-      {isMobile && console.log('Rendering mobile navigation') && (
+      {/* Mobile Bottom Navigation - FORCE VISIBLE */}
+      {(() => {
+        console.log('Mobile check:', { isMobile, windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'SSR', userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown' });
+        return isMobile;
+      })() && (
+        <>
+          {console.log('✅ MOBILE NAVIGATION RENDERING')}
+        </>
+      )}
+
+      {/* FORCE RENDER MOBILE NAV - IGNORE isMobile for now */}
+      {typeof window !== 'undefined' && window.innerWidth < 768 && (
         <motion.nav
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 400, damping: 30, duration: 0.5 }}
-          className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-black/98 backdrop-blur-3xl border-t-2 border-yellow-400/60 px-2 py-3 safe-area-inset-bottom shadow-2xl shadow-yellow-400/30 ${mobileMenuOpen ? 'hidden' : ''}`}
+          className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 bg-red-600 border-t-4 border-yellow-400 px-2 py-4 safe-area-inset-bottom shadow-2xl shadow-yellow-400/50 ${mobileMenuOpen ? 'hidden' : ''}`}
           style={{
-            paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
-            height: 'auto',
-            minHeight: '88px',
-            backdropFilter: 'blur(24px)',
-            WebkitBackdropFilter: 'blur(24px)',
             position: 'fixed',
-            bottom: '0px',
-            left: '0px',
-            right: '0px',
-            zIndex: 2147483647, // Maximum possible z-index
-            pointerEvents: 'auto',
-            transform: 'translateZ(0)', // Force GPU acceleration
-            willChange: 'transform',
-            contain: 'layout style paint'
+            bottom: '0px !important',
+            left: '0px !important',
+            right: '0px !important',
+            zIndex: '2147483647 !important',
+            display: 'block !important',
+            visibility: 'visible !important',
+            opacity: '1 !important',
+            height: '100px !important',
+            minHeight: '100px !important',
+            padding: '16px 8px !important',
+            backgroundColor: 'rgb(220 38 38) !important', // Bright red
+            borderTop: '4px solid rgb(250 204 21) !important', // Yellow border
+            boxShadow: '0 -4px 20px rgba(250, 204, 21, 0.5) !important',
+            transform: 'translateZ(0) !important',
+            pointerEvents: 'auto !important',
+            paddingBottom: 'max(20px, env(safe-area-inset-bottom)) !important'
           }}
         >
           <div className="flex items-center justify-around max-w-md mx-auto gap-1">
-            {navigationItems.slice(0, 4).map((item) => (
-              <motion.button
+            {navigationItems.slice(0, 4).map((item, index) => (
+              <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`flex flex-col items-center justify-center px-3 py-3 rounded-xl transition-all duration-300 min-w-0 flex-1 min-h-[68px] active:scale-95 touch-manipulation ${
-                  activeTab === item.id
-                    ? 'text-yellow-400 bg-yellow-400/20 shadow-lg shadow-yellow-400/30 border border-yellow-400/30'
-                    : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-800/70'
-                }`}
-                whileTap={{ scale: 0.88 }}
+                onClick={() => {
+                  console.log('Clicked nav item:', item.id);
+                  setActiveTab(item.id);
+                }}
+                className="flex flex-col items-center justify-center px-3 py-3 rounded-xl bg-white text-black font-bold min-w-0 flex-1 min-h-[60px] border-2 border-black"
                 style={{
-                  WebkitTapHighlightColor: 'transparent',
-                  WebkitTouchCallout: 'none',
-                  WebkitUserSelect: 'none'
+                  backgroundColor: 'white !important',
+                  color: 'black !important',
+                  border: '2px solid black !important',
+                  fontSize: '12px !important',
+                  fontWeight: 'bold !important'
                 }}
               >
-                <item.icon className={`w-7 h-7 mb-1 transition-transform duration-200 ${
-                  activeTab === item.id ? 'scale-110 drop-shadow-lg' : ''
-                }`} />
-                <span className="text-xs font-semibold truncate leading-tight">{item.label}</span>
-              </motion.button>
+                <item.icon className="w-6 h-6 mb-1" />
+                <span className="truncate">{item.label}</span>
+              </button>
             ))}
-            <motion.button
-              onClick={() => setMobileMenuOpen(true)}
-              className={`flex flex-col items-center justify-center px-3 py-3 rounded-xl transition-all duration-300 min-w-0 flex-1 min-h-[68px] active:scale-95 touch-manipulation ${
-                mobileMenuOpen
-                  ? 'text-yellow-400 bg-yellow-400/20 shadow-lg shadow-yellow-400/30 border border-yellow-400/30'
-                  : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-800/70'
-              }`}
-              whileTap={{ scale: 0.88 }}
+            <button
+              onClick={() => {
+                console.log('Clicked more menu');
+                setMobileMenuOpen(true);
+              }}
+              className="flex flex-col items-center justify-center px-3 py-3 rounded-xl bg-yellow-400 text-black font-bold min-w-0 flex-1 min-h-[60px] border-2 border-black"
               style={{
-                WebkitTapHighlightColor: 'transparent',
-                WebkitTouchCallout: 'none',
-                WebkitUserSelect: 'none'
+                backgroundColor: 'rgb(250 204 21) !important',
+                color: 'black !important',
+                border: '2px solid black !important',
+                fontSize: '12px !important',
+                fontWeight: 'bold !important'
               }}
             >
-              <Menu className={`w-7 h-7 mb-1 transition-transform duration-200 ${
-                mobileMenuOpen ? 'scale-110 drop-shadow-lg' : ''
-              }`} />
-              <span className="text-xs font-semibold leading-tight">More</span>
-            </motion.button>
+              <Menu className="w-6 h-6 mb-1" />
+              <span>More</span>
+            </button>
           </div>
         </motion.nav>
       )}
