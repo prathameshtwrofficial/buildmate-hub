@@ -8,6 +8,103 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMachine } from "@/hooks/useMachine";
 import { useIsMobile } from "@/hooks/use-mobile";
 
+// Optimized Animation Configurations for Ultra-Smooth Experience
+const ultraSmoothAnimations = {
+  // Header animations
+  headerEnter: {
+    y: -80,
+    opacity: 0
+  },
+  headerAnimate: {
+    y: 0,
+    opacity: 1
+  },
+
+  // Content sections
+  sectionLeft: {
+    opacity: 0,
+    x: -60,
+    scale: 0.95
+  },
+  sectionRight: {
+    opacity: 0,
+    x: 60,
+    scale: 0.95
+  },
+  sectionCenter: {
+    opacity: 0,
+    y: 40,
+    scale: 0.98
+  },
+  sectionAnimate: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    scale: 1
+  },
+
+  // Interactive elements
+  buttonHover: {
+    scale: 1.05,
+    y: -2
+  },
+  buttonTap: {
+    scale: 0.95,
+    y: 1
+  },
+
+  // List items with stagger
+  listItem: (index: number) => ({
+    opacity: 0,
+    y: 20,
+    scale: 0.9
+  }),
+  listItemAnimate: {
+    opacity: 1,
+    y: 0,
+    scale: 1
+  }
+};
+
+// Ultra-smooth transitions optimized for performance
+const ultraSmoothTransitions = {
+  header: {
+    type: "spring",
+    stiffness: 300,
+    damping: 35,
+    mass: 0.8,
+    duration: 0.6
+  },
+  section: {
+    type: "spring",
+    stiffness: 250,
+    damping: 30,
+    mass: 1,
+    duration: 0.8
+  },
+  fast: {
+    type: "spring",
+    stiffness: 400,
+    damping: 35,
+    mass: 0.6,
+    duration: 0.3
+  },
+  // Custom easing for buttery smooth experience
+  buttery: {
+    type: "tween",
+    duration: 0.5,
+    ease: [0.25, 0.46, 0.45, 0.94] // Custom cubic-bezier for ultra-smooth
+  },
+  stagger: (index: number) => ({
+    type: "spring",
+    stiffness: 350,
+    damping: 40,
+    mass: 0.7,
+    duration: 0.4,
+    delay: index * 0.08
+  })
+};
+
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -48,21 +145,28 @@ const ProductDetail = () => {
 
   return (
     <div className={`min-h-screen bg-gradient-to-br from-background via-background to-card/20 ${isMobile ? 'overflow-x-hidden' : ''}`}>
-      {/* Header */}
+      {/* Ultra-Smooth Header */}
       <motion.div
-        initial={{ y: -80 }}
-        animate={{ y: 0 }}
-        className={`sticky top-0 z-50 glass-card border-b border-border/50 ${isMobile ? 'safe-area-inset-top' : ''}`}
-        style={isMobile ? { paddingTop: 'env(safe-area-inset-top)' } : {}}
+        initial={ultraSmoothAnimations.headerEnter}
+        animate={ultraSmoothAnimations.headerAnimate}
+        transition={ultraSmoothTransitions.header}
+        className={`sticky top-0 z-50 glass-card border-b border-border/50 will-change-transform ${isMobile ? 'safe-area-inset-top' : ''}`}
+        style={{
+          ...isMobile ? { paddingTop: 'env(safe-area-inset-top)' } : {},
+          backfaceVisibility: 'hidden',
+          perspective: 1000
+        }}
       >
         <div className={`max-w-7xl mx-auto ${isMobile ? 'px-4 py-4' : 'px-6 py-4'}`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={ultraSmoothAnimations.buttonHover}
+                whileTap={ultraSmoothAnimations.buttonTap}
+                transition={ultraSmoothTransitions.fast}
                 onClick={() => navigate('/dashboard')}
-                className="p-3 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors"
+                className="p-3 bg-white/10 rounded-2xl hover:bg-white/20 transition-all duration-300 will-change-transform"
+                style={{ backfaceVisibility: 'hidden' }}
               >
                 <ArrowLeft className="w-5 h-5 text-foreground" />
               </motion.button>
@@ -74,22 +178,26 @@ const ProductDetail = () => {
 
             <div className="flex items-center gap-3">
               <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={ultraSmoothAnimations.buttonHover}
+                whileTap={ultraSmoothAnimations.buttonTap}
+                transition={ultraSmoothTransitions.fast}
                 onClick={() => setIsWishlisted(!isWishlisted)}
-                className={`p-3 rounded-2xl transition-all duration-300 ${
+                className={`p-3 rounded-2xl transition-all duration-300 will-change-transform ${
                   isWishlisted
                     ? 'bg-red-500/20 text-red-400'
                     : 'bg-white/10 text-white hover:bg-white/20'
                 }`}
+                style={{ backfaceVisibility: 'hidden' }}
               >
                 <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
               </motion.button>
 
               <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-3 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors"
+                whileHover={ultraSmoothAnimations.buttonHover}
+                whileTap={ultraSmoothAnimations.buttonTap}
+                transition={ultraSmoothTransitions.fast}
+                className="p-3 bg-white/10 rounded-2xl hover:bg-white/20 transition-all duration-300 will-change-transform"
+                style={{ backfaceVisibility: 'hidden' }}
               >
                 <Share className="w-5 h-5 text-foreground" />
               </motion.button>
@@ -100,12 +208,16 @@ const ProductDetail = () => {
 
       <div className={`max-w-7xl mx-auto ${isMobile ? 'px-4 py-6 pb-24' : 'px-6 py-8'}`}>
         <div className={`grid grid-cols-1 ${isMobile ? 'gap-8' : 'lg:grid-cols-2 gap-12'}`}>
-          {/* Image Gallery */}
+          {/* Ultra-Smooth Image Gallery */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-4"
+            initial={ultraSmoothAnimations.sectionLeft}
+            animate={ultraSmoothAnimations.sectionAnimate}
+            transition={{ ...ultraSmoothTransitions.section, delay: 0.2 }}
+            className="space-y-4 will-change-transform"
+            style={{
+              backfaceVisibility: 'hidden',
+              perspective: 1000
+            }}
           >
             {/* Main Image */}
             <div className="relative group">
@@ -128,12 +240,16 @@ const ProductDetail = () => {
             </div>
           </motion.div>
 
-          {/* Product Information */}
+          {/* Ultra-Smooth Product Information */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-6"
+            initial={ultraSmoothAnimations.sectionRight}
+            animate={ultraSmoothAnimations.sectionAnimate}
+            transition={{ ...ultraSmoothTransitions.section, delay: 0.4 }}
+            className="space-y-6 will-change-transform"
+            style={{
+              backfaceVisibility: 'hidden',
+              perspective: 1000
+            }}
           >
             {/* Product Title & Rating */}
             <div className="space-y-4">
@@ -230,7 +346,13 @@ const ProductDetail = () => {
                       </motion.button>
                     </div>
 
-                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <motion.div
+                      whileHover={!isMobile ? ultraSmoothAnimations.buttonHover : undefined}
+                      whileTap={ultraSmoothAnimations.buttonTap}
+                      transition={ultraSmoothTransitions.fast}
+                      className="will-change-transform"
+                      style={{ backfaceVisibility: 'hidden' }}
+                    >
                       <Button
                         className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-4 rounded-2xl shadow-lg hover:shadow-emerald-500/25 transition-all duration-300"
                         disabled={!machine.available}
@@ -240,7 +362,13 @@ const ProductDetail = () => {
                       </Button>
                     </motion.div>
 
-                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <motion.div
+                      whileHover={!isMobile ? ultraSmoothAnimations.buttonHover : undefined}
+                      whileTap={ultraSmoothAnimations.buttonTap}
+                      transition={ultraSmoothTransitions.fast}
+                      className="will-change-transform"
+                      style={{ backfaceVisibility: 'hidden' }}
+                    >
                       <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10 py-4 rounded-2xl">
                         <MessageCircle className="w-5 h-5 mr-2" />
                         Contact Owner

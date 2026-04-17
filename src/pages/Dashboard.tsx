@@ -21,8 +21,67 @@ import {
 
 
 
-// Premium UI Components - Professional Color Palette
-const GlassCard = ({ children, className = '', variant = 'default', glow = false, ...props }) => {
+// Optimized Animation Configurations for Smooth Performance
+const smoothAnimations = {
+  // Reduced motion for mobile performance
+  cardEnter: {
+    opacity: 0,
+    scale: 0.95,
+    y: 20
+  },
+  cardExit: {
+    opacity: 0,
+    scale: 0.9,
+    y: -10
+  },
+  cardAnimate: {
+    opacity: 1,
+    scale: 1,
+    y: 0
+  },
+  hoverLift: {
+    scale: 1.02,
+    y: -8
+  },
+  tapPress: {
+    scale: 0.98,
+    y: 2
+  }
+};
+
+// Optimized transition configurations
+const smoothTransitions = {
+  default: {
+    type: "spring",
+    stiffness: 400,
+    damping: 30,
+    mass: 0.8,
+    duration: 0.4
+  },
+  fast: {
+    type: "spring",
+    stiffness: 500,
+    damping: 35,
+    mass: 0.6,
+    duration: 0.3
+  },
+  slow: {
+    type: "spring",
+    stiffness: 300,
+    damping: 25,
+    mass: 1,
+    duration: 0.6
+  },
+  // Reduced motion for mobile
+  mobile: {
+    type: "tween",
+    duration: 0.25,
+    ease: [0.25, 0.46, 0.45, 0.94] // Custom smooth easing
+  }
+};
+
+// Premium UI Components - Professional Color Palette with Optimized Animations
+const GlassCard = ({ children, className = '', variant = 'default', glow = false, animationDelay = 0, ...props }) => {
   const variants = {
     default: 'bg-slate-900/70 backdrop-blur-xl border border-slate-700/40 shadow-2xl shadow-black/20',
     premium: 'bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-2xl border border-slate-600/50 shadow-2xl shadow-black/30',
@@ -36,11 +95,18 @@ const GlassCard = ({ children, className = '', variant = 'default', glow = false
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.02, y: -5 }}
-      transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
-      className={`rounded-3xl overflow-hidden ${variants[variant]} ${glow ? 'shadow-cyan-500/25' : ''} transition-all duration-500 ${className}`}
+      initial={smoothAnimations.cardEnter}
+      animate={smoothAnimations.cardAnimate}
+      whileHover={smoothAnimations.hoverLift}
+      whileTap={smoothAnimations.tapPress}
+      transition={{
+        ...smoothTransitions.default,
+        delay: animationDelay,
+        hover: { duration: 0.2 },
+        tap: { duration: 0.1 }
+      }}
+      className={`rounded-3xl overflow-hidden will-change-transform ${variants[variant]} ${glow ? 'shadow-cyan-500/25' : ''} transition-all duration-300 ${className}`}
+      style={{ backfaceVisibility: 'hidden', perspective: 1000 }}
       {...props}
     >
       {children}
@@ -638,18 +704,34 @@ const Dashboard = () => {
                   </div>
                 </GlassCard>
 
-                {/* Progressive Loading Machines Grid */}
+                {/* Optimized Progressive Loading Machines Grid */}
                 <div className={`grid gap-4 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
-                  {sortedMachines.map((equipment, index) => (
-                    <motion.div
-                      key={`${equipment.id}-${index}`}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      whileHover={{ y: -8, scale: 1.02 }}
-                      className={`bg-black/60 backdrop-blur-xl rounded-3xl border border-slate-700/30 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-yellow-500/20 transition-all duration-300 cursor-pointer ${isMobile ? 'max-w-full' : ''}`}
-                      onClick={() => navigate(`/product/${equipment.id}`)}
-                    >
+                  {sortedMachines.map((equipment, index) => {
+                    // Optimized stagger delay - reduced for smoother experience
+                    const staggerDelay = Math.min(index * 0.02, 0.3); // Max 300ms delay
+                    const isMobileReduced = isMobile && index > 3; // Reduce animations on mobile after first few
+
+                    return (
+                      <motion.div
+                        key={`${equipment.id}-${index}`}
+                        initial={isMobileReduced ? { opacity: 1, y: 0 } : smoothAnimations.cardEnter}
+                        animate={isMobileReduced ? { opacity: 1, y: 0 } : smoothAnimations.cardAnimate}
+                        transition={{
+                          ...smoothTransitions.mobile,
+                          delay: isMobileReduced ? 0 : staggerDelay,
+                          ease: [0.25, 0.46, 0.45, 0.94] // Custom smooth easing
+                        }}
+                        whileHover={!isMobile ? smoothAnimations.hoverLift : undefined}
+                        whileTap={!isMobile ? smoothAnimations.tapPress : undefined}
+                        className={`bg-black/60 backdrop-blur-xl rounded-3xl border border-slate-700/30 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-yellow-500/20 transition-all duration-300 cursor-pointer will-change-transform ${isMobile ? 'max-w-full' : ''}`}
+                        style={{
+                          backfaceVisibility: 'hidden',
+                          perspective: 1000,
+                          transform: 'translateZ(0)' // Force hardware acceleration
+                        }}
+                        onClick={() => navigate(`/product/${equipment.id}`)}
+                      >
+                    );
                         <div className="relative">
                           <img
                             src={equipment.image}
@@ -697,8 +779,9 @@ const Dashboard = () => {
                           </div>
                         </div>
                       </motion.div>
-                    ))}
-                  </div>
+                    );
+                  })}
+                </div>
 
                 {/* Premium Quick Actions & Analytics */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

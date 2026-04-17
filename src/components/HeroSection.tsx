@@ -6,6 +6,83 @@ import HeroScene from "./HeroScene";
 import heroBg from "@/assets/hero-bg.jpg";
 import { stats } from "@/data/machines";
 
+// Ultra-Smooth Hero Animations for Premium Experience
+const heroUltraSmooth = {
+  // Hero content animations
+  contentEnter: {
+    opacity: 0,
+    x: -80,
+    scale: 0.9
+  },
+  contentAnimate: {
+    opacity: 1,
+    x: 0,
+    scale: 1
+  },
+
+  // Stats animations with stagger
+  statsEnter: (index: number) => ({
+    opacity: 0,
+    y: 40,
+    scale: 0.8
+  }),
+  statsAnimate: {
+    opacity: 1,
+    y: 0,
+    scale: 1
+  },
+
+  // Button animations
+  buttonHover: {
+    scale: 1.08,
+    y: -4,
+    boxShadow: "0 20px 40px rgba(0,0,0,0.3)"
+  },
+  buttonTap: {
+    scale: 0.95,
+    y: 2
+  },
+
+  // Badge animations
+  badgePulse: {
+    scale: [1, 1.05, 1],
+    opacity: [0.9, 1, 0.9]
+  }
+};
+
+// Ultra-smooth transitions optimized for hero impact
+const heroUltraSmoothTransitions = {
+  content: {
+    type: "spring",
+    stiffness: 200,
+    damping: 25,
+    mass: 1,
+    duration: 1
+  },
+  stats: (index: number) => ({
+    type: "spring",
+    stiffness: 300,
+    damping: 35,
+    mass: 0.8,
+    duration: 0.6,
+    delay: 0.8 + (index * 0.1)
+  }),
+  button: {
+    type: "spring",
+    stiffness: 400,
+    damping: 30,
+    mass: 0.7,
+    duration: 0.4
+  },
+  badge: {
+    type: "tween",
+    duration: 2,
+    ease: "easeInOut",
+    repeat: Infinity,
+    repeatType: "reverse" as const
+  }
+};
+
 const HeroSection = () => {
   const navigate = useNavigate();
 
@@ -42,17 +119,25 @@ const HeroSection = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 w-full">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
-            initial={{ opacity: 0, x: -60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative"
+            initial={heroUltraSmooth.contentEnter}
+            animate={heroUltraSmooth.contentAnimate}
+            transition={heroUltraSmoothTransitions.content}
+            className="relative will-change-transform"
+            style={{
+              backfaceVisibility: 'hidden',
+              perspective: 1000
+            }}
           >
             {/* Premium glass morphism badge - Hidden on mobile */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="hidden md:inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8"
+              animate={[heroUltraSmooth.statsAnimate, heroUltraSmooth.badgePulse]}
+              transition={{
+                ...heroUltraSmoothTransitions.stats(0),
+                badge: heroUltraSmoothTransitions.badge
+              }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 will-change-transform"
+              style={{ backfaceVisibility: 'hidden' }}
             >
               <span className="w-3 h-3 rounded-full bg-green-400 animate-pulse shadow-lg" />
               <span className="text-sm font-semibold text-white drop-shadow-lg">500+ Machines Ready to Deploy</span>
@@ -88,8 +173,11 @@ const HeroSection = () => {
               transition={{ delay: 0.8, duration: 0.6 }}
             >
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={heroUltraSmooth.buttonHover}
+                whileTap={heroUltraSmooth.buttonTap}
+                transition={heroUltraSmoothTransitions.button}
+                className="will-change-transform"
+                style={{ backfaceVisibility: 'hidden' }}
               >
                 <Button
                   size="lg"

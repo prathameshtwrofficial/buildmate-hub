@@ -96,10 +96,46 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    /* Ultra-smooth animation performance optimizations */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* GPU acceleration for smooth animations */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
   }
 
   html {
     scroll-behavior: smooth;
+    /* Enable hardware acceleration for smoother scrolling */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Performance optimizations for animations */
+  * {
+    /* Force hardware acceleration for all animated elements */
+    transform-style: preserve-3d;
+    will-change: auto;
+  }
+
+  /* Optimize Framer Motion animations */
+  [data-framer-appear-id] {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -349,5 +385,107 @@
   }
   to {
     transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+  }
+}
+
+/* Ultra-smooth custom animations for premium UX */
+@keyframes ultra-smooth-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+    filter: blur(1px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes ultra-smooth-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ultra-smooth-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateZ(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+
+@keyframes ultra-smooth-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(45 86% 58% / 0.2),
+                0 0 40px hsl(45 86% 58% / 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px hsl(45 86% 58% / 0.4),
+                0 0 60px hsl(45 86% 58% / 0.3),
+                0 0 90px hsl(45 86% 58% / 0.2);
+  }
+}
+
+/* Performance-optimized utility classes */
+.smooth-enter {
+  animation: ultra-smooth-fade-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.smooth-slide-up {
+  animation: ultra-smooth-slide-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.smooth-scale-in {
+  animation: ultra-smooth-scale-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.smooth-glow {
+  animation: ultra-smooth-glow-pulse 3s ease-in-out infinite;
+}
+
+/* Hardware acceleration utilities */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
+}
+
+/* Smooth hover transitions */
+.smooth-hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.smooth-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Optimized mobile animations - reduce motion on touch devices */
+@media (max-width: 768px) {
+  .smooth-enter,
+  .smooth-slide-up,
+  .smooth-scale-in {
+    animation-duration: 0.4s;
+  }
+
+  .smooth-glow {
+    animation-duration: 2s;
+  }
+
+  /* Reduce hover effects on touch devices */
+  .smooth-hover:hover {
+    transform: none;
+    box-shadow: none;
   }
 }
