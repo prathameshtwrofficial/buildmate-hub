@@ -510,13 +510,19 @@ const Dashboard = () => {
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 400, damping: 30, duration: 0.5 }}
-          className={`fixed bottom-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-2xl border-t-2 border-yellow-400/50 px-2 py-3 safe-area-inset-bottom shadow-2xl shadow-yellow-400/20 ${mobileMenuOpen ? 'hidden' : ''}`}
+          className={`fixed bottom-0 left-0 right-0 z-50 bg-black/98 backdrop-blur-3xl border-t-2 border-yellow-400/60 px-2 py-3 safe-area-inset-bottom shadow-2xl shadow-yellow-400/30 ${mobileMenuOpen ? 'hidden' : ''}`}
           style={{
             paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
             height: 'auto',
-            minHeight: '84px',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)'
+            minHeight: '88px',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            pointerEvents: 'auto'
           }}
         >
           <div className="flex items-center justify-around max-w-md mx-auto gap-1">
@@ -635,7 +641,7 @@ const Dashboard = () => {
       </AnimatePresence>
 
         {/* Main Content */}
-        <main className={`flex-1 transition-all duration-500 ${!isMobile ? (sidebarCollapsed ? 'ml-24' : 'ml-80') : 'pb-32 overflow-x-hidden'}`}>
+        <main className={`flex-1 transition-all duration-500 ${!isMobile ? (sidebarCollapsed ? 'ml-24' : 'ml-80') : 'pb-40 overflow-x-hidden'}`}>
               <div className={`${isMobile ? 'p-4 pb-28' : 'p-6'} relative z-10 max-w-full overflow-x-hidden`}>
             {/* Home/Dashboard Tab */}
             {activeTab === 'home' && (
