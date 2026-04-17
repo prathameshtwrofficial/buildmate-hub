@@ -506,9 +506,6 @@ const Dashboard = () => {
 
       {/* Mobile Bottom Navigation */}
       {isMobile && (
-        <>
-          {console.log('Mobile navigation rendering:', { isMobile, navigationItems: navigationItems.length })}
-        </>
         <motion.nav
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
